@@ -6,11 +6,11 @@
 	created:	 23:7:2009   19:13
 	file base:	 spline_fitting.h
 	author:		 Zheng Qian
-    contact:     qian.zheng@siat.ac.cn
-    affiliation: Shenzhen Institute of Advanced Technology
-	
+	contact:     qian.zheng@siat.ac.cn
+	affiliation: Shenzhen Institute of Advanced Technology
+
 	purpose:	 cubic spline curve fitting  a set of 2d points
-	             This is an implementation of this paper: 
+				 This is an implementation of this paper:
 				 http://www.geometrie.tuwien.ac.at/ig/sn/2006/wpl_curves_06/wpl_curves_06.html
 *********************************************************************/
 
@@ -20,8 +20,8 @@ class  SplineCurveFitting
 {
 public:
 
-	SplineCurveFitting(void){}
-	~SplineCurveFitting(void){}
+	SplineCurveFitting(void) {}
+	~SplineCurveFitting(void) {}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Fitting B-Spline Curves to Point Clouds 
@@ -32,18 +32,18 @@ public:
 	// maxIterNum: the maximum of iteration
 	// eplison:    the threshold of ending iteration
 	//////////////////////////////////////////////////////////////////////////
-	double apply( const vector<Vector2d>& points, 
+	double apply(const vector<Vector2d>& points,
 		CubicBSplineCurve& curve,
-		int controlNum  = 28,
-		int maxIterNum = 30, 
-		double alpha  = 0.002,
+		int controlNum = 28,
+		int maxIterNum = 30,
+		double alpha = 0.002,
 		double beta = 0.005,  // 0.005	     
 		double eplison = 0.0001,
 		EInitType initType = SPHERE_INIT);
 
 private:
 	// initial control points
-	void initControlPoint( const vector<Vector2d>& points, 
+	void initControlPoint(const vector<Vector2d>& points,
 		vector<Vector2d>& controlPs,
 		int controlNum,
 		EInitType initType);

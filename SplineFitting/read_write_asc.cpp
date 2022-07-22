@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-bool CReadWriteAsc::readAsc( const string& filename, vector<Vector2d>& points )
+bool CReadWriteAsc::readAsc(const string& filename, vector<Vector2d>& points)
 {
 
 	std::ifstream fin(filename);
@@ -12,34 +12,34 @@ bool CReadWriteAsc::readAsc( const string& filename, vector<Vector2d>& points )
 	std::string line;
 	int nRow = 0;
 	int nCol = 0;
-	if( fin.fail() )
+	if (fin.fail())
 		return false;
 
 
-	while( std::getline( fin, line ) )
+	while (std::getline(fin, line))
 	{
 		std::stringstream ss(line);
 		double d = 0;
 		nCol = 0;
-		while( ss >> d)
+		while (ss >> d)
 		{
-			coefficients.push_back( d);
+			coefficients.push_back(d);
 			++nCol;
 		}
 		++nRow;
 	}
 	fin.close();
 
-	if( nCol < 2)
+	if (nCol < 2)
 		return false;
 
 
 
-	points.resize( nRow);
+	points.resize(nRow);
 	int idx = 0;
-	for( int i = 0; i!= nRow; ++i )
+	for (int i = 0; i != nRow; ++i)
 	{
-		points[i] = Vector2d( coefficients[idx+0], coefficients[idx+1]);
+		points[i] = Vector2d(coefficients[idx + 0], coefficients[idx + 1]);
 		idx += nCol;
 	}
 	return true;
@@ -47,15 +47,15 @@ bool CReadWriteAsc::readAsc( const string& filename, vector<Vector2d>& points )
 
 
 
-bool CReadWriteAsc::writeAsc( const string& filename, const vector<Vector2d>& points )
+bool CReadWriteAsc::writeAsc(const string& filename, const vector<Vector2d>& points)
 {
-	ofstream fout( filename.c_str());
-	if( fout.fail() )
+	ofstream fout(filename.c_str());
+	if (fout.fail())
 		return false;
 
-	for( int i = 0; i!= points.size(); ++i )
+	for (int i = 0; i != points.size(); ++i)
 	{
-		fout << points[i].x() << " " << points[i].y()  << " 0" << endl;
+		fout << points[i].x() << " " << points[i].y() << " 0" << endl;
 	}
 	fout.close();
 

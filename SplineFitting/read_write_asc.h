@@ -18,7 +18,7 @@ public:
 	// Time:      2014/08/05
 	// Author:    Qian
 	//************************************
-	static bool readAsc( const string& filename, vector<Vector2d>& points);
+	static bool readAsc(const string& filename, vector<Vector2d>& points);
 
 	//************************************
 	// Method:    writeAsc
@@ -27,5 +27,5 @@ public:
 	// Time:      2014/08/05
 	// Author:    Qian
 	//************************************
-	static bool writeAsc( const string& filename, const vector<Vector2d>& points );
+	static bool writeAsc(const string& filename, const vector<Vector2d>& points);
 };

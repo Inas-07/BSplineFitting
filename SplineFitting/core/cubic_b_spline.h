@@ -8,7 +8,7 @@ file base:	 cubic_b_spline.h
 author:		 Zheng Qian
 contact:     qian.zheng@siat.ac.cn
 affiliation: Shenzhen Institute of Advanced Technology
-purpose:	 cubic B spline  
+purpose:	 cubic B spline
 reference:   http://en.wikipedia.org/wiki/B-spline
 refined:     2014/08/05
 
@@ -22,21 +22,21 @@ using namespace std;
 using namespace Eigen;
 
 
-
-class CubicBSplineCurve 
+// 三次B样条
+class CubicBSplineCurve
 {
 
 public:
 	typedef std::pair<int, double> Parameter;
 
-	CubicBSplineCurve( double interal = 0.001 )
+	CubicBSplineCurve(double interal = 0.001)
 		: interal_(interal)
 	{
 
 	}
 
-	~CubicBSplineCurve() { 
-		clear(); 
+	~CubicBSplineCurve() {
+		clear();
 	}
 
 	size_t nb_control()  const { return controls_.size(); }
@@ -49,62 +49,62 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// compute the first differential
 	//////////////////////////////////////////////////////////////////////////
-	Vector2d getFirstDiff( const Parameter& para) const ;
+	Vector2d getFirstDiff(const Parameter& para) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// compute the second differential
 	//////////////////////////////////////////////////////////////////////////
-	Vector2d getSecondDiff( const Parameter& para) const ;
+	Vector2d getSecondDiff(const Parameter& para) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// compute the curvature
 	//////////////////////////////////////////////////////////////////////////
-	double getCurvature( const Parameter& para) const ;
+	double getCurvature(const Parameter& para) const;
 
 
 	//////////////////////////////////////////////////////////////////////////
 	// compute the unit tangent vector
 	//////////////////////////////////////////////////////////////////////////
-	Vector2d getTangent( const Parameter &para ) const ;
+	Vector2d getTangent(const Parameter& para) const;
 
 
 	//////////////////////////////////////////////////////////////////////////
 	// compute the unit Normal vector
 	//////////////////////////////////////////////////////////////////////////
-	Vector2d getNormal( const Parameter &para) const;
+	Vector2d getNormal(const Parameter& para) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// compute the Curvature center ( rho = k)
 	//////////////////////////////////////////////////////////////////////////
-	Vector2d getCurvCenter( const Parameter &para) const;
+	Vector2d getCurvCenter(const Parameter& para) const;
 
 	///////////////////////////////////////////////////////////////////////////
 	// compute the foot print
 	//////////////////////////////////////////////////////////////////////////
-	double findFootPrint( const vector<Vector2d>& givepoints, 
-		vector<Parameter>& footPrints) const ;
+	double findFootPrint(const vector<Vector2d>& givepoints,
+		vector<Parameter>& footPrints) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// find the coff vector
 	//////////////////////////////////////////////////////////////////////////
-	VectorXd getCoffe( const Parameter& para) const ;
+	VectorXd getCoffe(const Parameter& para) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// set the control points and compute a uniform spatial partition of the data points
 	//////////////////////////////////////////////////////////////////////////
-	void setNewControl( const vector<Vector2d>& controlPs);
+	void setNewControl(const vector<Vector2d>& controlPs);
 
 	//////////////////////////////////////////////////////////////////////////
 	// check if two point is on same side. para is foot print of p1
 	//////////////////////////////////////////////////////////////////////////
-	bool checkSameSide( Vector2d p1,  Vector2d p2, Vector2d neip);
+	bool checkSameSide(Vector2d p1, Vector2d p2, Vector2d neip);
 
-	MatrixXd getSIntegralSq( );
+	MatrixXd getSIntegralSq();
 
-	MatrixXd getFIntegralSq( );
+	MatrixXd getFIntegralSq();
 
 
-	const vector<Vector2d>& getControls() const {return controls_;}
+	const vector<Vector2d>& getControls() const { return controls_; }
 	const vector<Vector2d>& getSamples() const { return positions_; }
 
 
@@ -115,18 +115,18 @@ private:
 		positions_.clear();
 	}
 
-	Parameter  getPara( int index ) const ;
+	Parameter  getPara(int index) const;
 
 	//////////////////////////////////////////////////////////////////////////
 	//winding number test for a point in a polygon
 	// softSurfer (www.softsurfer.com)
 	//////////////////////////////////////////////////////////////////////////
-	bool checkInside( Vector2d p);
+	bool checkInside(Vector2d p);
 
 	//////////////////////////////////////////////////////////////////////////
 	// tests if a point is Left|On|Right of an infinite line.
 	//////////////////////////////////////////////////////////////////////////
-	int isLeft( Vector2d p0, Vector2d p1, Vector2d p2);
+	int isLeft(Vector2d p0, Vector2d p1, Vector2d p2);
 
 
 private:
@@ -135,4 +135,3 @@ private:
 	std::vector<Vector2d> positions_;   //曲线上的采样点
 
 };
-

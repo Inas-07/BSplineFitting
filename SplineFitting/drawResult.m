@@ -4,7 +4,9 @@ control_name = strcat(input_name, '_controls.txt');
 spline_name = strcat(input_name, '_spline.txt');
 
 P = load(input_name);
+whos P
 figure;
+%matlab下标从1开始
 plot(P(:,1), P(:,2),'b.','MarkerSize',15);
 %plot(P(:,1), P(:,2),'b');
 
