@@ -49,13 +49,15 @@ bool CReadWriteAsc::readAsc(const string& filename, vector<Vector2d>& points)
 
 bool CReadWriteAsc::writeAsc(const string& filename, const vector<Vector2d>& points)
 {
+
 	ofstream fout(filename.c_str());
 	if (fout.fail())
 		return false;
 
+	
 	for (int i = 0; i != points.size(); ++i)
 	{
-		fout << points[i].x() << " " << points[i].y() << " 0" << endl;
+		fout << points[i].x() << " " << points[i].y() << endl;
 	}
 	fout.close();
 

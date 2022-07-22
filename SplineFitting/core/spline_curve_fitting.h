@@ -48,3 +48,5 @@ private:
 		int controlNum,
 		EInitType initType);
 };
+
+std::vector<Eigen::Vector2d> generate_points(size_t num);

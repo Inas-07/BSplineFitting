@@ -1,10 +1,7 @@
 #include "cubic_b_spline.h"
 #include <fstream>
-
 #include <ANN/ANN.h>
-
-
-
+#include <cassert>
 
 void CubicBSplineCurve::setNewControl(const vector<Vector2d>& controlPs)
 {
@@ -33,8 +30,13 @@ void CubicBSplineCurve::setNewControl(const vector<Vector2d>& controlPs)
 //************************************
 
 // http://www2.cs.uregina.ca/~anima/408/Notes/Interpolation/UniformBSpline.htm
+// 只取4个controlpoints 来计算，则来自于bspline的性质：
+// Basis function Ni,p(u) is non-zero on [ui, ui+p+1). Or, equivalently, 
+// Ni,p(u) is non-zero on p+1 knot spans [ui, ui+1), [ui+1, ui+2), ..., [ui+p, ui+p+1).
+// 并且，由于是uniform bspline，所以可以一直用相同的coefficient matrix。
 Vector2d CubicBSplineCurve::getPos(const Parameter& para) const
 {
+
 	// coefficient matrix
 	MatrixXd cm(4, 4);
 	cm << -1, 3, -3, 1,
@@ -48,7 +50,6 @@ Vector2d CubicBSplineCurve::getPos(const Parameter& para) const
 	// 
 	MatrixXd  tm(1, 4);
 	tm << tf * tf * tf, tf* tf, tf, 1;
-
 
 	size_t n = nb_control();
 
@@ -66,6 +67,7 @@ Vector2d CubicBSplineCurve::getPos(const Parameter& para) const
 
 Vector2d CubicBSplineCurve::getFirstDiff(const Parameter& para) const
 {
+
 	MatrixXd cm(4, 4);
 	cm << -1, 3, -3, 1,
 		3, -6, 3, 0,
@@ -94,13 +96,12 @@ Vector2d CubicBSplineCurve::getFirstDiff(const Parameter& para) const
 // 二阶导
 Vector2d CubicBSplineCurve::getSecondDiff(const Parameter& para) const
 {
-	// coefficent matrix?
+
 	MatrixXd cm(4, 4);
 	cm << -1, 3, -3, 1,
 		3, -6, 3, 0,
 		-3, 0, 3, 0,
 		1, 4, 1, 0;
-
 
 	double tf = para.second;
 	int ki = para.first;
@@ -119,10 +120,10 @@ Vector2d CubicBSplineCurve::getSecondDiff(const Parameter& para) const
 	return Vector2d(rm(0, 0), rm(0, 1));
 }
 
-
 // Refer: http://en.wikipedia.org/wiki/Curvature
-double  CubicBSplineCurve::getCurvature(const Parameter& para)  const
+double CubicBSplineCurve::getCurvature(const Parameter& para)  const
 {
+
 	Vector2d fp = getFirstDiff(para);
 	Vector2d sp = getSecondDiff(para);
 
@@ -132,16 +133,16 @@ double  CubicBSplineCurve::getCurvature(const Parameter& para)  const
 	return kappa;
 }
 
-
-
 Vector2d CubicBSplineCurve::getTangent(const Parameter& para) const
 {
+
 	Vector2d p = getFirstDiff(para);
 	return p.normalized();
 }
 
 Vector2d CubicBSplineCurve::getNormal(const Parameter& para) const
 {
+
 	Vector2d v = getTangent(para);
 	return Vector2d(-v.y(), v.x());
 }
@@ -149,6 +150,7 @@ Vector2d CubicBSplineCurve::getNormal(const Parameter& para) const
 
 Vector2d CubicBSplineCurve::getCurvCenter(const Parameter& para) const
 {
+
 	Vector2d p = getPos(para);
 
 	Vector2d fd = getFirstDiff(para);
@@ -229,14 +231,12 @@ CubicBSplineCurve::Parameter CubicBSplineCurve::getPara(int index) const
 	return make_pair(ki, tf);
 }
 
-
-
 VectorXd CubicBSplineCurve::getCoffe(const Parameter& para) const
 {
+
 	int ki = para.first;
 	double tf = para.second;
 
-	// coefficent matrix?
 	Matrix4d cm(4, 4);
 	cm << -1, 3, -3, 1,
 		3, -6, 3, 0,
@@ -260,7 +260,6 @@ VectorXd CubicBSplineCurve::getCoffe(const Parameter& para) const
 	return newv;
 }
 
-
 //temporary solution 
 bool CubicBSplineCurve::checkSameSide(Vector2d p1, Vector2d p2, Vector2d neip)
 {
@@ -275,8 +274,6 @@ bool CubicBSplineCurve::checkSameSide(Vector2d p1, Vector2d p2, Vector2d neip)
 
 	return  b;
 }
-
-
 
 bool CubicBSplineCurve::checkInside(Vector2d p)
 {
@@ -303,7 +300,6 @@ bool CubicBSplineCurve::checkInside(Vector2d p)
 		return false;
 	else
 		return true;
-
 }
 
 int CubicBSplineCurve::isLeft(Vector2d p0, Vector2d p1, Vector2d p2)
@@ -312,8 +308,7 @@ int CubicBSplineCurve::isLeft(Vector2d p0, Vector2d p1, Vector2d p2)
 		- (p2.x() - p0.x()) * (p1.y() - p0.y()));
 }
 
-
-
+// 不知道这个在做什么
 MatrixXd CubicBSplineCurve::getSIntegralSq()
 {
 	// compute P"(t)
@@ -353,7 +348,7 @@ MatrixXd CubicBSplineCurve::getSIntegralSq()
 	return pm;
 }
 
-
+// 不知道这个在做什么
 MatrixXd CubicBSplineCurve::getFIntegralSq()
 {
 	// compute P"(t)
@@ -390,6 +385,6 @@ MatrixXd CubicBSplineCurve::getFIntegralSq()
 			}
 		}
 	}
-	return pm;
 
+	return pm;
 }

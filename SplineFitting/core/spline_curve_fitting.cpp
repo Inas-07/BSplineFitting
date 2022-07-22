@@ -1,6 +1,12 @@
 #include "spline_curve_fitting.h"
 #include <eigen/SVD>
+#include <random>
 
+#define DEBUG_ENABLE true
+
+#if DEBUG_ENABLE 
+	#include<iostream>
+#endif
 
 #define TEMP_PI       3.14159265358979323846
 
@@ -14,7 +20,6 @@ void SplineCurveFitting::initControlPoint(const vector<Vector2d>& datapoints,
 	controlPs.clear();
 	int perNum = controlNum / 4;
 
-	// 我能理解这一if底下在做什么，但不认为他实现的很好（而且他默认也用的不是这个实现）
 	if (initType == RECT_INIT)
 	{
 		Vector2d v1 = datapoints[0];
@@ -140,8 +145,6 @@ double SplineCurveFitting::apply(
 			// 曲率半径（因为担心curvature是0所以把初始化放在了下面
 			double rho = 10e+6;
 
-			// TODO: 得弄明白这个getPos是怎么回事
-			// 其返回parameters[i] 对应的 b-spline 上的采样点（虽然并没有访问positions_，而是重新算了一遍）
 			Vector2d neip = spline->getPos(parameters[i]);
 
 			Vector2d Tkv = spline->getTangent(parameters[i]);
@@ -152,7 +155,6 @@ double SplineCurveFitting::apply(
 			Vector2d curvature_center(0.0, 0.0);
 			bool is_datapoints_neip_on_the_same_side = true;
 
-
 			if (curvature != 0.0f)
 			{
 				rho = 1 / curvature;
@@ -160,9 +162,6 @@ double SplineCurveFitting::apply(
 				double ddd = (curvature_center - neip).norm();
 				is_datapoints_neip_on_the_same_side = spline->checkSameSide(curvature_center, datapoints[i], neip);
 			}
-
-			// 大脑有点过载……
-			// 周日从这里开始弄
 
 			VectorXd coffv = spline->getCoffe(parameters[i]);
 			MatrixXd tempcoffm1(controlNum, 1);
@@ -234,4 +233,27 @@ double SplineCurveFitting::apply(
 	}
 
 	return fsd;
+}
+
+// randomly generate datapoints 
+std::vector<Eigen::Vector2d> generate_points(size_t num) {
+
+	std::random_device rd;
+
+	std::mt19937 e2(rd());
+
+	std::normal_distribution<double> dist(-1.0, 1.0);
+
+	std::vector<Eigen::Vector2d> result;
+
+
+	for (int n = 0; n < num; n++) {
+		double x = dist(e2);
+		double y = dist(e2);
+		Eigen::Vector2d pos(x, y);
+
+		result.push_back(pos);
+	}
+
+	return result;
 }
